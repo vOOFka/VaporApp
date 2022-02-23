@@ -10,5 +10,10 @@ func routes(_ app: Application) throws {
     }
     
     let authController = AuthController()
+
+    app.post("login", use: authController.login)
+    
+    app.post("logout", use: authController.logout)
+        
     app.post("signup", use: authController.signUp)
 }
