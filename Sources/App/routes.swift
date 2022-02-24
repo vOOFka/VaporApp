@@ -18,4 +18,8 @@ func routes(_ app: Application) throws {
     app.post("signup", use: authController.signUp)
     
     app.post("editprofile", use: authController.editProfile)
+    
+    let goodsController = GoodsController()
+    
+    app.post("catalogdata", use: goodsController.getCategory)
 }

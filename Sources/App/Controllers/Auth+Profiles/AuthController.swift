@@ -10,7 +10,7 @@ import Vapor
 final class AuthController {
     // MARK: - AuthResponse
     func login(_ req: Request) -> EventLoopFuture<LoginResponse> {
-        guard let body = try? req.content.decode(LoginReqest.self) else {
+        guard let body = try? req.content.decode(LoginRequest.self) else {
             return handleLoginError(by: req, with: "Поправь прицел и повтори бросок!")
         }
         print(body)
@@ -23,7 +23,7 @@ final class AuthController {
     }
     
     func logout(_ req: Request) -> EventLoopFuture<LoginResponse> {
-        guard let body = try? req.content.decode(LoginReqest.self) else {
+        guard let body = try? req.content.decode(LoginRequest.self) else {
             return handleLoginError(by: req, with: "Поправь прицел и повтори бросок!")
         }
         print(body)
