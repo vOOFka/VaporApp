@@ -8,13 +8,7 @@
 import Vapor
 
 struct User: Content {
-    let id: Int
+    var id: Int
     let login: String
     let password: String
-    
-    init(login: String, password: String) {
-        self.id = abs(Int(UUID().uuidString.hash))
-        self.login = login
-        self.password = password
-    }
 }

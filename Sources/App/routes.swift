@@ -16,4 +16,6 @@ func routes(_ app: Application) throws {
     app.post("logout", use: authController.logout)
         
     app.post("signup", use: authController.signUp)
+    
+    app.post("editprofile", use: authController.editProfile)
 }
