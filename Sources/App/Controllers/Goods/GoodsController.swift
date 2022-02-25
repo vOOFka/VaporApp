@@ -33,13 +33,13 @@ final class GoodsController {
         var pageIndex = 1
         var maxItemsPerPage = Int.max
         
-        if req.pageNumber != nil {
-            pageIndex = req.pageNumber!
-            maxItemsPerPage = 3
+        if let page = req.pageNumber{
+            pageIndex = page
+            maxItemsPerPage = 2
         }
         
         if let currentCategory = currentCategory,
-           currentCategory.goods.isEmpty {
+           !currentCategory.goods.isEmpty {
             let currentCategoryPage = getPageProducts(page: pageIndex, allItems: currentCategory.goods, maxItemsPerPage: maxItemsPerPage)
             return ProductCategory(id: req.categoryId, goods: currentCategoryPage)
         }
@@ -60,7 +60,7 @@ final class GoodsController {
         var length = max(0, allItems.count - startIndex)
         length = min(Int(maxItemsPerPage), length)
         
-        guard length > 0 else { return [] }
+        guard length > 0 else { return allItems }
         
         return Array(allItems[startIndex..<(startIndex + length)])
     }
