@@ -46,6 +46,15 @@ final class GoodsController {
         return nil
     }
     
+    private func handleGoodsError(by request: Request, with message: String = "Unknown error") -> EventLoopFuture<GoodsResponse> {
+        let response = GoodsResponse(
+            result: 0,
+            errorMessage: message,
+            pageNumber: nil,
+            goods: nil)
+        return request.eventLoop.future(response)
+    }
+    
     private func getPageProducts(page: Int, allItems: [Product], maxItemsPerPage: Int) -> [Product] {
         let startIndex = Int(page * maxItemsPerPage)
         var length = max(0, allItems.count - startIndex)
@@ -56,12 +65,39 @@ final class GoodsController {
         return Array(allItems[startIndex..<(startIndex + length)])
     }
     
-    private func handleGoodsError(by request: Request, with message: String = "Unknown error") -> EventLoopFuture<GoodsResponse> {
-        let response = GoodsResponse(
-            result: 0,
+    func getProductById(_ req: Request) -> EventLoopFuture<ProductResponce> {
+        guard let body = try? req.content.decode(ProductRequest.self) else {
+            return handleProductError(by: req, with: "Поправь прицел и повтори бросок!")
+        }
+        
+        guard let neededProduct = extractionProductById(body) else {
+            return handleProductError(by: req, with: "Нет такого товара!")
+        }
+        
+        print(body)
+        let response = ProductResponce(
+            result: 1,
             errorMessage: nil,
-            pageNumber: nil,
-            goods: nil)
+            product: neededProduct)
+        return req.eventLoop.future(response)
+    }
+    
+    private func extractionProductById(_ req: ProductRequest) -> Product? {
+        let caretaker = GoodsCaretaker()
+        let allGoodsCategories = caretaker.retrieveGoodsCategories()
+        for category in allGoodsCategories {
+            guard let neededProduct = category.goods.first(where: { $0.id == req.productId }) else {
+                continue
+            }
+            return neededProduct
+        }
+        return nil
+    }
+    private func handleProductError(by request: Request, with message: String = "Unknown error") -> EventLoopFuture<ProductResponce> {
+        let response = ProductResponce(
+            result: 0,
+            errorMessage: message,
+            product: nil)
         return request.eventLoop.future(response)
     }
 }
