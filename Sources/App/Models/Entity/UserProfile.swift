@@ -8,7 +8,7 @@
 import Vapor
 
 struct UserProfile: Content {
-    let user: User
+    var user: User
     let name: String
     let lastname: String
     let email: String

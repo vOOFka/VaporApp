@@ -5,9 +5,9 @@
 //  Created by Home on 23.02.2022.
 //
 
-import Foundation
+import Vapor
 
-struct BaseResponse {
+struct BaseResponse: Content {
     var result: Int
     var errorMessage: String?
 }
