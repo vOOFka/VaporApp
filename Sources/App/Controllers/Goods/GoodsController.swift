@@ -7,7 +7,7 @@
 
 import Vapor
 
-final class GoodsController {
+final class GoodsController: Controllers {
     func getCategory(_ req: Request) -> EventLoopFuture<GoodsResponse> {
         guard let body = try? req.content.decode(GoodsRequest.self) else {
             return handleGoodsError(by: req, with: "Поправь прицел и повтори бросок!")
@@ -40,7 +40,7 @@ final class GoodsController {
         
         if let currentCategory = currentCategory,
            !currentCategory.goods.isEmpty {
-            let currentCategoryPage = getPageProducts(page: pageIndex, allItems: currentCategory.goods, maxItemsPerPage: maxItemsPerPage)
+            let currentCategoryPage = getPage(page: pageIndex, allItems: currentCategory.goods, maxItemsPerPage: maxItemsPerPage)
             return ProductCategory(id: req.categoryId, goods: currentCategoryPage)
         }
         return nil
@@ -53,16 +53,6 @@ final class GoodsController {
             pageNumber: nil,
             goods: nil)
         return request.eventLoop.future(response)
-    }
-    
-    private func getPageProducts(page: Int, allItems: [Product], maxItemsPerPage: Int) -> [Product] {
-        let startIndex = Int(page * maxItemsPerPage)
-        var length = max(0, allItems.count - startIndex)
-        length = min(Int(maxItemsPerPage), length)
-        
-        guard length > 0 else { return allItems }
-        
-        return Array(allItems[startIndex..<(startIndex + length)])
     }
     
     func getProductById(_ req: Request) -> EventLoopFuture<ProductResponce> {

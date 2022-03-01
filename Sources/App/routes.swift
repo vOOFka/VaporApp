@@ -17,7 +17,7 @@ func routes(_ app: Application) throws {
         
     app.post("signup", use: authController.signUp)
     
-    app.post("editprofile", use: authController.editProfile)
+    app.post("edituser", use: authController.editUserProfile)
     
     let goodsController = GoodsController()
     

@@ -8,5 +8,5 @@
 import Vapor
 
 struct ProfileRequest: Content {
-    let userProfile: UserProfile
+    let user: User
 }

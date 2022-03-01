@@ -35,14 +35,14 @@ final class AuthController {
     
     private func checkLoginUser(from req: LoginRequest) -> User? {
         let loginFromRequest = req.login
-        let caretaker = UserProfilesCaretaker()
+        let caretaker = UsersCaretaker()
         
-        let allUsersProfiles = caretaker.retrieveUserProfiles()
-        let authUser = allUsersProfiles.first(where: { $0.user.login == loginFromRequest })
+        let allUsers = caretaker.retrieveUsers()
+        let authUser = allUsers.first(where: { $0.login == loginFromRequest })
         //CheckPassword
         if let authUser = authUser,
-           authUser.user.password == req.password {
-            return authUser.user
+           authUser.password == req.password {
+            return authUser
         }
         return nil
     }
@@ -78,13 +78,13 @@ final class AuthController {
     }
     
     private func checkLogotUser(from req: LogoutRequest) -> User? {
-        let caretaker = UserProfilesCaretaker()
+        let caretaker = UsersCaretaker()
         
-        let allUsersProfiles = caretaker.retrieveUserProfiles()
-        let logoutUser = allUsersProfiles.first(where: { $0.user.id == Int(req.userId) })
+        let allUsers = caretaker.retrieveUsers()
+        let logoutUser = allUsers.first(where: { $0.id == Int(req.userId) })
         //CheckPassword
         if let logoutUser = logoutUser {
-            return logoutUser.user
+            return logoutUser
         }
         return nil
     }
@@ -95,8 +95,8 @@ final class AuthController {
             return handleProfileError(by: req, with: "Поправь прицел и повтори бросок!")
         }
         
-        guard !body.userProfile.user.password.isEmpty,
-              body.userProfile.user.password.count >= 8 else {
+        guard !body.user.password.isEmpty,
+              body.user.password.count >= 8 else {
                   return handleProfileError(by: req, with: "Пароль должен быть больше 8ми символов!")
         }
         
@@ -107,46 +107,44 @@ final class AuthController {
         print(body)
         let response = ProfileResponse(
             result: 1,
-            userId: newUser.user.id,
+            userId: newUser.id,
             userMessage: "Регистрация прошла успешно!",
             errorMessage: nil
         )
         return req.eventLoop.future(response)
     }
     
-    private func createNewUser(from req: ProfileRequest) -> UserProfile? {
-        let id = abs(Int(UUID().uuidString.hash))
-        var userProfile = req.userProfile
-        userProfile.user.id = id
-        let caretaker = UserProfilesCaretaker()
+    private func createNewUser(from req: ProfileRequest) -> User? {
+        var user = req.user
+        user.id = abs(Int(UUID().uuidString.hash))
+        let caretaker = UsersCaretaker()
         
-        var allUsersProfiles = caretaker.retrieveUserProfiles()
-        let isNotExist = allUsersProfiles.filter {
-            $0.email == userProfile.email ||
-            $0.user.login == userProfile.user.login ||
-            $0.user.id == userProfile.user.id
+        var allUsers = caretaker.retrieveUsers()
+        let isNotExist = allUsers.filter {
+            $0.userProfile.email == user.userProfile.email ||
+            $0.login == user.login ||
+            $0.id == user.id
         }.isEmpty
         //Save
         if isNotExist {
-            allUsersProfiles.append(userProfile)
-            caretaker.save(profiles: allUsersProfiles)
-            //print(allUsersProfiles)
-            return userProfile
+            allUsers.append(user)
+            caretaker.save(users: allUsers)
+            return user
         }
         return nil
     }
     
-    func editProfile(_ req: Request) -> EventLoopFuture<ProfileResponse> {
+    func editUserProfile(_ req: Request) -> EventLoopFuture<ProfileResponse> {
         guard let body = try? req.content.decode(ProfileRequest.self) else {
             return handleProfileError(by: req, with: "Поправь прицел и повтори бросок!")
         }
         
-        guard !body.userProfile.user.password.isEmpty,
-              body.userProfile.user.password.count >= 8 else {
+        guard !body.user.password.isEmpty,
+              body.user.password.count >= 8 else {
                   return handleProfileError(by: req, with: "Пароль должен быть больше 8ми символов!")
         }
         
-        guard let editUser = editUser(from: body) else {
+        guard let editUser = getEditUser(from: body) else {
             return handleProfileError(by: req, with: "Такой пользователь не существует.")
         }
         
@@ -160,19 +158,18 @@ final class AuthController {
         return req.eventLoop.future(response)
     }
     
-    private func editUser(from req: ProfileRequest) -> User? {
-        let userProfile = req.userProfile
-        let caretaker = UserProfilesCaretaker()
+    private func getEditUser(from req: ProfileRequest) -> User? {
+        let user = req.user
+        let caretaker = UsersCaretaker()
         
-        let allUsersProfiles = caretaker.retrieveUserProfiles()
-        let userForEdit = allUsersProfiles.first(where: { $0.user.id == userProfile.user.id })
-        var otherUsers = allUsersProfiles.filter{ $0.user.id != userProfile.user.id }
+        let allUsers = caretaker.retrieveUsers()
+        let userForEdit = allUsers.first(where: { $0.id == user.id })
+        var otherUsers = allUsers.filter{ $0.id != user.id }
         //Edit
         if userForEdit != nil {
-            otherUsers.append(userProfile)
-            caretaker.save(profiles: otherUsers)
-            //print(otherUsers)
-            return userProfile.user
+            otherUsers.append(user)
+            caretaker.save(users: otherUsers)
+            return user
         }
         return nil
     }
