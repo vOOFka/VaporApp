@@ -8,6 +8,7 @@
 import Vapor
 
 final class GoodsController: Controllers {
+    // MARK: - Get category response
     func getCategory(_ req: Request) -> EventLoopFuture<GoodsResponse> {
         guard let body = try? req.content.decode(GoodsRequest.self) else {
             return handleGoodsError(by: req, with: "Поправь прицел и повтори бросок!")
@@ -45,16 +46,7 @@ final class GoodsController: Controllers {
         }
         return nil
     }
-    
-    private func handleGoodsError(by request: Request, with message: String = "Unknown error") -> EventLoopFuture<GoodsResponse> {
-        let response = GoodsResponse(
-            result: 0,
-            errorMessage: message,
-            pageNumber: nil,
-            goods: nil)
-        return request.eventLoop.future(response)
-    }
-    
+    // MARK: - Get product response
     func getProductById(_ req: Request) -> EventLoopFuture<ProductResponce> {
         guard let body = try? req.content.decode(ProductRequest.self) else {
             return handleProductError(by: req, with: "Поправь прицел и повтори бросок!")
@@ -83,6 +75,16 @@ final class GoodsController: Controllers {
         }
         return nil
     }
+    // MARK: - Handle errors
+    private func handleGoodsError(by request: Request, with message: String = "Unknown error") -> EventLoopFuture<GoodsResponse> {
+        let response = GoodsResponse(
+            result: 0,
+            errorMessage: message,
+            pageNumber: nil,
+            goods: nil)
+        return request.eventLoop.future(response)
+    }
+
     private func handleProductError(by request: Request, with message: String = "Unknown error") -> EventLoopFuture<ProductResponce> {
         let response = ProductResponce(
             result: 0,

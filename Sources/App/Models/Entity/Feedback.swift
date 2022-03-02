@@ -11,4 +11,10 @@ struct Feedback: Content {
     let id: Int
     let userId: Int
     let comment: String
+    
+    init(userId: Int, comment: String) {
+        self.id = abs(Int(UUID().uuidString.hash))
+        self.userId = userId
+        self.comment = comment
+    }
 }

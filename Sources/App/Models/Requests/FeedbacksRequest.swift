@@ -10,4 +10,5 @@ import Vapor
 struct FeedbacksRequest: Content {
     let productId: Int
     let pageNumber: Int?
+    let newFeedback: Feedback?
 }
