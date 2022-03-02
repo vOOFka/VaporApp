@@ -17,7 +17,7 @@ final class AuthController {
         guard !body.password.isEmpty,
               body.password.count >= 8 else {
                   return handleAuthError(by: req, with: "Пароль должен быть больше 8ми символов!")
-        }
+              }
         
         guard let authUser = checkLoginUser(from: body) else {
             return handleAuthError(by: req, with: "Неверный логин/пароль.")

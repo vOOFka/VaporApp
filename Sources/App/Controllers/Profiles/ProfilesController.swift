@@ -17,7 +17,7 @@ final class ProfilesController {
         guard !body.user.password.isEmpty,
               body.user.password.count >= 8 else {
                   return handleProfileError(by: req, with: "Пароль должен быть больше 8ми символов!")
-        }
+              }
         
         guard let newUser = createNewUser(from: body) else {
             return handleProfileError(by: req, with: "Такой пользователь уже существует.")
@@ -60,7 +60,7 @@ final class ProfilesController {
         guard !body.user.password.isEmpty,
               body.user.password.count >= 8 else {
                   return handleProfileError(by: req, with: "Пароль должен быть больше 8ми символов!")
-        }
+              }
         
         guard let editUser = getEditUser(from: body) else {
             return handleProfileError(by: req, with: "Такой пользователь не существует.")

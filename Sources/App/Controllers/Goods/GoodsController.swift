@@ -84,7 +84,7 @@ final class GoodsController: Controllers {
             goods: nil)
         return request.eventLoop.future(response)
     }
-
+    
     private func handleProductError(by request: Request, with message: String = "Unknown error") -> EventLoopFuture<ProductResponce> {
         let response = ProductResponce(
             result: 0,

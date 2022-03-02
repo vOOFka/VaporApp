@@ -4,13 +4,13 @@ func routes(_ app: Application) throws {
     app.get { req in
         return "It works!"
     }
-
+    
     app.get("hello") { req -> String in
         return "Hello, world!"
     }
     
     let authController = AuthController()
-
+    
     app.post("login", use: authController.login)
     
     app.post("logout", use: authController.logout)
@@ -55,7 +55,7 @@ func createSomeData(){
     }
     
     let goodsCareteker = GoodsCaretaker()
-
+    
     let feedbacks = [Feedback(userId: 123, comment: "Отличный товар!"),
                      Feedback(userId: 321, comment: "Very well product!"),
                      Feedback(userId: 567, comment: "Nice!")]

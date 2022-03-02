@@ -23,34 +23,34 @@ final class FeedbacksController: Controllers {
         let currentProductFeedbacksPage = getPageOfFeedbacks(from: body)
         guard currentProductFeedbacksPage.isEmpty else {
             return handleFeedbacksError(by: req, with: "У товара нет отзывов!")
-            
-            print(body)
-            let response = FeedbacksResponse(
-                result: 1,
-                errorMessage: nil,
-                pageNumber: body.pageNumber,
-                feedbacks: currentProductFeedbacksPage)
-            return req.eventLoop.future(response)
         }
+        
+        print(body)
+        let response = FeedbacksResponse(
+            result: 1,
+            errorMessage: nil,
+            pageNumber: body.pageNumber,
+            feedbacks: currentProductFeedbacksPage)
+        return req.eventLoop.future(response)
     }
     
     private func getProduct(from req: FeedbacksRequest, newFeedback: Feedback? = nil) {
         let caretaker = GoodsCaretaker()
-        let allGoodsCategories = caretaker.retrieveGoodsCategories()
-        let indexCurrentCategory = -1
-        let indexCurrentProduct = -1
+        var allGoodsCategories = caretaker.retrieveGoodsCategories()
+        var indexCurrentCategory = -1
+        var indexCurrentProduct = -1
         
         for (index, category) in allGoodsCategories.enumerated() {
             indexCurrentProduct = category.goods.firstIndex(where: { product in
                 product.id == req.productId
-            })
+            }) ?? -1
             if indexCurrentProduct >= 0 {
                 indexCurrentCategory = index
                 currentProduct = category.goods[indexCurrentProduct]
             }
         }
         
-        if feedback != nil,
+        if newFeedback != nil,
            indexCurrentCategory >= 0 {
             allGoodsCategories[indexCurrentCategory].goods[indexCurrentProduct].feedbacks.append(newFeedback)
         }
@@ -90,7 +90,7 @@ final class FeedbacksController: Controllers {
             result: 1,
             errorMessage: nil,
             pageNumber: body.pageNumber,
-            feedbacks: currentProduct?.feedbacks)
+            feedbacks: currentProduct?.feedbacks ?? [])
         return req.eventLoop.future(response)
     }
     // MARK: - Handle errors
