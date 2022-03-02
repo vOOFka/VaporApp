@@ -33,6 +33,8 @@ func routes(_ app: Application) throws {
     
     app.post("addfeedback", use: feedbacksController.addFeedback)
     
+    app.post("removefeedback", use: feedbacksController.removeFeedback)
+    
     createSomeData()
 }
 
