@@ -19,7 +19,7 @@ func routes(_ app: Application) throws {
     
     app.post("signup", use: profilesController.signUp)
     
-    app.post("edituser", use: profilesController.editUserProfile)
+    app.post("editprofile", use: profilesController.editUserProfile)
     
     let goodsController = GoodsController()
     
@@ -74,4 +74,6 @@ func createSomeData(){
         allCategories.append(category)
         goodsCareteker.save(goodsCategories: allCategories)
     }
+    //    allCategories.removeAll()
+    //    goodsCareteker.save(goodsCategories: allCategories)
 }
