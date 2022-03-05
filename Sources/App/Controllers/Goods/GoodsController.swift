@@ -40,7 +40,8 @@ final class GoodsController: Controllers {
         }
         
         if let currentCategory = currentCategory,
-           !currentCategory.goods.isEmpty {
+           !currentCategory.goods.isEmpty,
+           pageIndex >= 0 {
             let currentCategoryPage = getPage(page: pageIndex, allItems: currentCategory.goods, maxItemsPerPage: maxItemsPerPage)
             return ProductCategory(id: req.categoryId, goods: currentCategoryPage)
         }

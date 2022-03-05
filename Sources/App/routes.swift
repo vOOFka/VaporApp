@@ -58,14 +58,15 @@ func createSomeData(){
     
     let goodsCareteker = GoodsCaretaker()
     
-    let feedbacks = [Feedback(userId: 123, comment: "Отличный товар!"),
-                     Feedback(userId: 321, comment: "Very well product!"),
-                     Feedback(userId: 567, comment: "Nice!")]
+    let feedbacks = [Feedback(id: 444, userId: 123, comment: "Отличный товар!"),
+                     Feedback(id: 555, userId: 321, comment: "Very well product!"),
+                     Feedback(id: 666, userId: 567, comment: "Nice!")]
     
     let productFirst = Product(id: 111, name: "Notebook ASUS", price: 3000, description: "Super fast notebook", feedbacks: feedbacks)
     let productSecond = Product(id: 222, name: "Iphone", price: 2000, description: "Great phone", feedbacks: feedbacks)
     let productThierd = Product(id: 333, name: "Notebook Lenovo", price: 2400, description: "Sale", feedbacks: feedbacks)
-    let category = ProductCategory(id: 123, goods: [productFirst, productSecond, productThierd])
+    let productFourth = Product(id: 444, name: "Ipad", price: 1400, description: "Gift ++", feedbacks: feedbacks)
+    let category = ProductCategory(id: 321, goods: [productFirst, productSecond, productThierd, productFourth])
     
     var allCategories = goodsCareteker.retrieveGoodsCategories()
     let existCategory = allCategories.first(where: { $0.id == category.id })
