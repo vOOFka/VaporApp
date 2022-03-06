@@ -55,6 +55,7 @@ final class FeedbacksController: Controllers {
            indexCurrentProduct >= 0 {
             let feedback = createNewFeedback(userId: newFeedback.userId, comment: newFeedback.comment)
             allGoodsCategories[indexCurrentCategory].goods[indexCurrentProduct].feedbacks.append(feedback)
+            caretaker.save(goodsCategories: allGoodsCategories)
             currentProduct?.feedbacks.append(feedback)
         }
         
@@ -115,7 +116,7 @@ final class FeedbacksController: Controllers {
         return req.eventLoop.future(response)
     }
     
-    func createNewFeedback(userId: Int, comment: String) -> Feedback {
+    private func createNewFeedback(userId: Int, comment: String) -> Feedback {
         Feedback(id: abs(Int(UUID().uuidString.hash)), userId: userId, comment: comment)
     }
     // MARK: - Remove feedbacks response
