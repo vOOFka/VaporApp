@@ -10,5 +10,5 @@ import Vapor
 struct BasketRequest: Content {
     let userId: Int
     let totalSumma: Int
-    let products: [Product]
+    let productsIds: [Int]
 }

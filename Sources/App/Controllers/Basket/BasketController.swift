@@ -18,12 +18,12 @@ final class BasketController {
             return handleBasketError(by: req, with: "Пользователь не авторизован/ не зарегистрирован!")
         }
         
-        guard body.products.isEmpty else {
+        guard !body.productsIds.isEmpty else {
             return handleBasketError(by: req, with: "Козина не может быть пустой!")
         }
         
-        guard 1...5000 ~= body.totalSumma else {
-            return handleBasketError(by: req, with: "Лимит транзакции ограничен 5000 попугаев")
+        guard 1...6000 ~= body.totalSumma else {
+            return handleBasketError(by: req, with: "Лимит транзакции ограничен 6000 попугаев")
         }
         
         print(body)
