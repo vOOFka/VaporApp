@@ -35,6 +35,10 @@ func routes(_ app: Application) throws {
     
     app.post("removefeedback", use: feedbacksController.removeFeedback)
     
+    let basketController = BasketController()
+    
+    app.post("paybasket", use: basketController.payBasket)
+    
     createSomeData()
 }
 
