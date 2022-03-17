@@ -11,4 +11,5 @@ struct User: Content {
     var id: Int
     let login: String
     let password: String
+    let userProfile: UserProfile
 }

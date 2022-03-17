@@ -9,5 +9,5 @@ import Vapor
 
 struct ProductCategory: Content {
     let id: Int
-    let goods: [Product]
+    var goods: [Product]
 }

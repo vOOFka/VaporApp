@@ -12,4 +12,5 @@ struct Product: Content {
     let name: String
     let price: Int
     let description: String
+    var feedbacks: [Feedback?] = []
 }
